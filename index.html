@@ -1,178 +1,134 @@
 <!DOCTYPE html>
-<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Dashboard HUD</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --bg-glass: rgba(0, 0, 0, 0.6);
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --accent-color: #667eea;
-            --hp-color: #ff4b2b;
-            --food-color: #ffa502;
-            --water-color: #1e90ff;
-            --fuel-color: #2ed573;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-
-        body {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background: transparent; /* Penting agar game terlihat */
-        }
-
-        /* Container Utama di Pojok Kanan Bawah */
-        #hud-container {
-            position: absolute;
-            bottom: 25px;
-            right: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: flex-end;
-        }
-
-        .hud-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            min-width: 220px;
-        }
-
-        /* Bagian Status Pemain */
-        .status-group {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .stat-item i { font-size: 16px; }
-        .stat-value { font-size: 13px; font-weight: bold; color: white; }
-
-        /* Progress Bar Bulat/Line Ringkas */
-        .progress-container {
-            width: 45px;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
+        body
+        {
+            background: transparent;
             overflow: hidden;
         }
-
-        .progress-fill {
-            height: 100%;
-            transition: width 0.5s ease;
+        .background
+        {
+            background: linear-gradient(94.79deg, rgba(72, 85, 99, 0.9) 12.79%, rgba(41, 50, 60, 0.9) 112.24%);
+            border-radius: 4px;
+            left:10px;
+            top:700px;
+            position: relative;
+            width: 250px;
+            height: 60px;
+            animation: fade2 1s 5s forwards;
+            margin-top: -125px;
+        }
+        .text-head
+        {
+            color: white;
+            font-family:  TT Norms;
+            font-size: 13px;
+            left:34px;
+            top:-18px;
+            position: relative;
+            animation: fade2 1s 5s forwards;
+        }
+        .text-second
+        {
+            color: rgb(184, 184, 184);
+            font-family:  TT Norms;
+            font-size: 12px;
+            left:5px;
+            top:-28px;
+            position: relative;   
+            animation: fade2 1s 5s forwards;
+        }
+        .icon
+        {
+            top: 5px;
+            left:10px;
+            position: relative;
+        }
+        @keyframes fade1 {
+        0% {
+            opacity: 1;
+        }
+        99% {
+            opacity: 0;
+            height: 200px;
+            width: 200px;
+        }
+        100% {
+            opacity: 0;
+            height: 0;
+            width: 0;
+        }
         }
 
-        /* Bagian Kendaraan (Hanya muncul jika di dalam kendaraan) */
-        #vehicle-hud {
-            display: none; /* Hidden by default */
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(0,0,0,0.6));
+        @keyframes fade2 {
+        0% {
+            opacity: 1;
+            visibility: visible;
+        }
+        99% {
+            opacity: 0;
+            visibility: hidden;
+            position: relative;
+        }
+        100% {
+            opacity: 0;
+            position: fixed;
+        }
         }
 
-        .vehicle-info {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-        }
 
-        .label { color: rgba(255,255,255,0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Animasi Low Status */
-        .low-status {
-            animation: pulse 1.5s infinite;
-        }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 75, 43, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); }
-        }
     </style>
 </head>
 <body>
-
-    <div id="hud-container">
-        <div class="hud-card" id="vehicle-hud">
-            <div class="stat-item">
-                <i class="fas fa-gas-pump" style="color: var(--fuel-color);"></i>
-                <div class="stat-value" id="fuel-val">100%</div>
-                <div class="progress-container"><div id="fuel-bar" class="progress-fill" style="background: var(--fuel-color); width: 100%;"></div></div>
+    <div id="append" class="main">
+        <!--<div class="background">
+            <div class="icon">
+                <img src="https://img.icons8.com/officel/20/000000/help.png">
+                <img src="https://img.icons8.com/color/20/000000/help--v1.png"> 
             </div>
-            <div style="width: 1px; height: 30px; background: var(--border-glass);"></div>
-            <div class="stat-item">
-                <i class="fas fa-car-crash" style="color: var(--hp-color);"></i>
-                <div class="stat-value" id="vhp-val">100%</div>
-                <div class="progress-container"><div id="vhp-bar" class="progress-fill" style="background: var(--hp-color); width: 100%;"></div></div>
-            </div>
-        </div>
-
-        <div class="hud-card" id="player-hud">
-            <div class="status-group">
-                <div class="stat-item">
-                    <i class="fas fa-hamburger" style="color: var(--food-color);"></i>
-                    <div class="stat-value" id="food-val">100%</div>
-                    <div class="progress-container"><div id="food-bar" class="progress-fill" style="background: var(--food-color); width: 100%;"></div></div>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-tint" style="color: var(--water-color);"></i>
-                    <div class="stat-value" id="water-val">100%</div>
-                    <div class="progress-container"><div id="water-bar" class="progress-fill" style="background: var(--water-color); width: 100%;"></div></div>
-                </div>
-            </div>
-        </div>
+            <a id="head" class="text-head">
+                                         
+            </a>
+            <p id="second" class="text-second">                                 ,                                           </p>
+        </div>-->
     </div>
 
-    <script>
-        // Fungsi untuk mengupdate data dari PAWN
-        function updateHUD(food, water, fuel, vhp, inVehicle) {
-            // Update Player
-            document.getElementById('food-val').innerText = food + '%';
-            document.getElementById('food-bar').style.width = food + '%';
-            
-            document.getElementById('water-val').innerText = water + '%';
-            document.getElementById('water-bar').style.width = water + '%';
+<script>
+    cef.on("data:not", (heads, seconds) => {
+        addnot(heads, seconds);
+    });
 
-            // Kondisi Kendaraan
-            const vHud = document.getElementById('vehicle-hud');
-            if(inVehicle) {
-                vHud.style.display = 'flex';
-                document.getElementById('fuel-val').innerText = fuel + '%';
-                document.getElementById('fuel-bar').style.width = fuel + '%';
-                
-                document.getElementById('vhp-val').innerText = vhp + '%';
-                document.getElementById('vhp-bar').style.width = vhp + '%';
-                
-                // Alert jika bensin tipis
-                if(fuel < 15) vHud.classList.add('low-status');
-                else vHud.classList.remove('low-status');
-            } else {
-                vHud.style.display = 'none';
-            }
-        }
 
-        // Contoh Event dari SAMP CEF Plugin
-        if (typeof cef !== 'undefined') {
-            cef.on("updateHUD", (food, water, fuel, vhp, inVehicle) => {
-                updateHUD(food, water, fuel, vhp, inVehicle);
-            });
-        }
-    </script>
+    function addnot(heads, seconds) {
+           let div =  document.createElement('div');
+           div.className = "background";
+
+           let icon = document.createElement('div');
+           icon.className = "icon";
+           div.append(icon);
+
+           let img = document.createElement('img');
+           img.src = "https://img.icons8.com/officel/20/000000/help.png";
+           icon.append(img);
+
+
+           let a1 = document.createElement('a');
+
+           a1.className = "text-head";
+           a1.innerHTML = heads;
+           div.append(a1);
+
+           let p2 = document.createElement('p');
+
+           p2.className = "text-second";
+           p2.innerHTML = seconds;
+           div.append(p2);
+
+           let app = document.getElementById('append');
+
+           app.append(div);
+    }
+</script>
 </body>
-</html>
