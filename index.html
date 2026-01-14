@@ -1,134 +1,40 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEF Test Page</title>
     <style>
-        body
-        {
-            background: transparent;
+        body {
+            background-color: rgba(0, 0, 0, 0.5); /* Transparan agar tidak menutupi seluruh layar GTA */
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             overflow: hidden;
         }
-        .background
-        {
-            background: linear-gradient(94.79deg, rgba(72, 85, 99, 0.9) 12.79%, rgba(41, 50, 60, 0.9) 112.24%);
-            border-radius: 4px;
-            left:10px;
-            top:700px;
-            position: relative;
-            width: 250px;
-            height: 60px;
-            animation: fade2 1s 5s forwards;
-            margin-top: -125px;
+        .test-box {
+            border: 5px solid #00ff00;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            text-align: center;
         }
-        .text-head
-        {
-            color: white;
-            font-family:  TT Norms;
-            font-size: 13px;
-            left:34px;
-            top:-18px;
-            position: relative;
-            animation: fade2 1s 5s forwards;
+        h1 { color: #00ff00; }
+        .status {
+            font-size: 24px;
+            margin-top: 10px;
         }
-        .text-second
-        {
-            color: rgb(184, 184, 184);
-            font-family:  TT Norms;
-            font-size: 12px;
-            left:5px;
-            top:-28px;
-            position: relative;   
-            animation: fade2 1s 5s forwards;
-        }
-        .icon
-        {
-            top: 5px;
-            left:10px;
-            position: relative;
-        }
-        @keyframes fade1 {
-        0% {
-            opacity: 1;
-        }
-        99% {
-            opacity: 0;
-            height: 200px;
-            width: 200px;
-        }
-        100% {
-            opacity: 0;
-            height: 0;
-            width: 0;
-        }
-        }
-
-        @keyframes fade2 {
-        0% {
-            opacity: 1;
-            visibility: visible;
-        }
-        99% {
-            opacity: 0;
-            visibility: hidden;
-            position: relative;
-        }
-        100% {
-            opacity: 0;
-            position: fixed;
-        }
-        }
-
-
-
-
     </style>
 </head>
 <body>
-    <div id="append" class="main">
-        <!--<div class="background">
-            <div class="icon">
-                <img src="https://img.icons8.com/officel/20/000000/help.png">
-                <img src="https://img.icons8.com/color/20/000000/help--v1.png"> 
-            </div>
-            <a id="head" class="text-head">
-                                         
-            </a>
-            <p id="second" class="text-second">                                 ,                                           </p>
-        </div>-->
+    <div class="test-box">
+        <h1>CEF STATUS: <span style="color: yellow;">ONLINE</span></h1>
+        <p class="status">Jika Anda melihat kotak ini, berarti CEF Anda <b>BERHASIL</b> terpasang.</p>
+        <p>Versi Browser: <script>document.write(navigator.userAgent.substring(0, 50) + "...");</script></p>
     </div>
-
-<script>
-    cef.on("data:not", (heads, seconds) => {
-        addnot(heads, seconds);
-    });
-
-
-    function addnot(heads, seconds) {
-           let div =  document.createElement('div');
-           div.className = "background";
-
-           let icon = document.createElement('div');
-           icon.className = "icon";
-           div.append(icon);
-
-           let img = document.createElement('img');
-           img.src = "https://img.icons8.com/officel/20/000000/help.png";
-           icon.append(img);
-
-
-           let a1 = document.createElement('a');
-
-           a1.className = "text-head";
-           a1.innerHTML = heads;
-           div.append(a1);
-
-           let p2 = document.createElement('p');
-
-           p2.className = "text-second";
-           p2.innerHTML = seconds;
-           div.append(p2);
-
-           let app = document.getElementById('append');
-
-           app.append(div);
-    }
-</script>
 </body>
+</html>
